@@ -7,6 +7,8 @@ import java.time.Instant;
 import java.util.Date;
 
 import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -14,7 +16,17 @@ import org.junit.Test;
  */
 public class MovieRepositoryTest {
     
-    private MovieRepository movieRepository = new MovieRepository("127.0.0.1");
+    private static MovieRepository movieRepository;
+    
+    @BeforeClass
+    public static void initRepository() {
+        movieRepository = new MovieRepository("127.0.0.1");
+    }
+    
+    @AfterClass
+    public static void closeRepository() {
+        movieRepository.close();
+    }
     
     @After
     public void tearDown() throws Exception {
@@ -119,6 +131,7 @@ public class MovieRepositoryTest {
         //WHEN
         Iterable<Movie> bestMovies = movieRepository.findFiveBestVotedMovies();
         
+        //THEN
         assertThat(bestMovies)
             .extracting("title", "voteAverage")
             .containsExactly(

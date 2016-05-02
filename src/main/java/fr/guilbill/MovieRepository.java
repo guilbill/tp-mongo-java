@@ -34,21 +34,23 @@ public class MovieRepository {
     }
     
     public void save(Movie movie) {
-        //TODO 1.0 
+        //TODO
         moviesCollection.save(movie);
     }
     
     public Iterable<Movie> find() {
-        //TODO 1.0
+        //TODO
         Iterable<Movie> movies = this.moviesCollection.find().as(Movie.class);
         return movies;
     }
     
     public void update(Movie movie) {
+        //TODO
         moviesCollection.update(movie.getId()).with(movie);
     }
     
     public Movie findByTitle(String title) {
+        //TODO
         return moviesCollection.findOne("{title:'" + title + "'}").as(Movie.class);
     }
     
@@ -60,7 +62,7 @@ public class MovieRepository {
         }.getType();
         List<Movie> movies = jsonMapper.fromJson(moviesReader, moviesType);
         
-        movies.forEach(movie -> this.save((Movie) movie));
+        movies.forEach(movie -> this.moviesCollection.save((Movie) movie));
     }
     
     public void clearDataBase() {
@@ -73,5 +75,9 @@ public class MovieRepository {
     
     public Iterable<Movie> findFiveBestVotedMovies() {
         return moviesCollection.find().sort("{voteAverage:-1}").limit(5).as(Movie.class);
+    }
+    
+    public void close() {
+        mongoClient.close();
     }
 }
