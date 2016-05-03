@@ -9,6 +9,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 
@@ -23,7 +25,6 @@ import com.mongodb.MongoClient;
  */
 public class MovieRepository {
     
-    private final Gson jsonMapper = new Gson();
     private final MongoClient mongoClient;
     private final MongoCollection moviesCollection;
     
@@ -35,29 +36,39 @@ public class MovieRepository {
     
     public void save(Movie movie) {
         //TODO
-        moviesCollection.save(movie);
+        throw new NotImplementedException();
     }
     
     public Iterable<Movie> find() {
         //TODO
-        Iterable<Movie> movies = this.moviesCollection.find().as(Movie.class);
-        return movies;
+        throw new NotImplementedException();
     }
     
     public void update(Movie movie) {
         //TODO
-        moviesCollection.update(movie.getId()).with(movie);
+        throw new NotImplementedException();
     }
     
     public Movie findByTitle(String title) {
         //TODO
-        return moviesCollection.findOne("{title:'" + title + "'}").as(Movie.class);
+        throw new NotImplementedException();
+    }
+    
+    public void delete(Movie movie) {
+        //TODO
+        throw new NotImplementedException();
+    }
+    
+    public Iterable<Movie> findFiveBestVotedMovies() {
+        //TODO
+        throw new NotImplementedException();
     }
     
     public void loadFile(String filePath) throws URISyntaxException, FileNotFoundException {
         final URI moviesFileURI = Resources.getResource(filePath).toURI();
         JsonReader moviesReader = new JsonReader(new FileReader(new File(moviesFileURI)));
-        
+    
+        final Gson jsonMapper = new Gson();
         Type moviesType = new TypeToken<ArrayList<Movie>>() {
         }.getType();
         List<Movie> movies = jsonMapper.fromJson(moviesReader, moviesType);
@@ -67,14 +78,6 @@ public class MovieRepository {
     
     public void clearDataBase() {
         moviesCollection.drop();
-    }
-    
-    public void delete(Movie movie) {
-        moviesCollection.remove(movie.getId());
-    }
-    
-    public Iterable<Movie> findFiveBestVotedMovies() {
-        return moviesCollection.find().sort("{voteAverage:-1}").limit(5).as(Movie.class);
     }
     
     public void close() {
